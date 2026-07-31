@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Ha Jeonghyeon</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="contact">
+
+<header id="site-header"></header>
+
+<main class="page-wrap contact-page">
+  <div class="contact-wrap">
+    <div class="contact-email" id="contact-email"></div>
+    <div class="contact-social" id="contact-social"></div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/works-data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/lang.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("contact-email").innerHTML =
+      `<a href="mailto:${SITE.email}">${SITE.email}</a>`;
+    const socialLinks = [
+      SITE.instagram ? `<a href="${SITE.instagram}" target="_blank" rel="noopener">Instagram</a>` : "",
+      SITE.vimeo ? `<a href="${SITE.vimeo}" target="_blank" rel="noopener">Vimeo</a>` : "",
+    ].filter(Boolean).join(" &nbsp; ");
+    document.getElementById("contact-social").innerHTML = socialLinks;
+  });
+</script>
+</body>
+</html>
