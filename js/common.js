@@ -48,6 +48,7 @@ function renderHeader() {
 }
 
 function renderFooter() {
+  return; // 하단 푸터 사용 안 함 (되살리려면 이 줄을 지우세요)
   const footer = document.getElementById("site-footer");
   if (!footer) return;
   const links = [
@@ -62,8 +63,103 @@ function renderFooter() {
   `;
 }
 
+
+/* ── 화면 하단 사운드 재생바 (페이지를 옮겨도 유지됨) ────────────────── */
+const SC_KEY = "sc-player";
+
+function loadScApi(cb) {
+  if (window.SC) return cb();
+  const el = document.createElement("script");
+  el.src = "https://w.soundcloud.com/player/api.js";
+  el.onload = cb;
+  document.head.appendChild(el);
+}
+
+function fmtTime(ms) {
+  const t = Math.max(0, Math.floor(ms / 1000));
+  return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
+}
+
+function mountSoundBar(state, autoplay) {
+  let bar = document.getElementById("sound-bar");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "sound-bar";
+    document.body.appendChild(bar);
+  }
+
+  bar.innerHTML =
+    '<iframe id="sound-bar-frame" allow="autoplay" src="https://w.soundcloud.com/player/?url=' +
+    encodeURIComponent(state.url) +
+    '&auto_play=' + (autoplay ? "true" : "false") + '&hide_related=true&show_comments=false&show_user=false"></iframe>' +
+    '<button type="button" id="sb-play" aria-label="play">\u25b6</button>' +
+    '<span id="sb-cur">0:00</span>' +
+    '<div id="sb-track"><div id="sb-fill"></div></div>' +
+    '<span id="sb-dur">0:00</span>' +
+    '<span id="sb-title"></span>' +
+    '<button type="button" id="sb-close" aria-label="close">\u00d7</button>';
+
+  document.body.classList.add("has-sound-bar");
+
+  document.getElementById("sb-close").addEventListener("click", () => {
+    sessionStorage.removeItem(SC_KEY);
+    bar.remove();
+    document.body.classList.remove("has-sound-bar");
+  });
+
+  loadScApi(() => {
+    const widget = SC.Widget(document.getElementById("sound-bar-frame"));
+    const playBtn = document.getElementById("sb-play");
+    const fill = document.getElementById("sb-fill");
+    const track = document.getElementById("sb-track");
+    const cur = document.getElementById("sb-cur");
+    const durEl = document.getElementById("sb-dur");
+    let duration = 0;
+
+    widget.bind(SC.Widget.Events.READY, () => {
+      widget.getCurrentSound((snd) => {
+        if (snd) document.getElementById("sb-title").textContent = snd.title;
+      });
+      widget.getDuration((d) => {
+        duration = d;
+        durEl.textContent = fmtTime(d);
+      });
+      if (state.position) widget.seekTo(state.position);
+      if (autoplay) widget.play();
+    });
+
+    widget.bind(SC.Widget.Events.PLAY, () => (playBtn.textContent = "\u2016"));
+    widget.bind(SC.Widget.Events.PAUSE, () => (playBtn.textContent = "\u25b6"));
+    widget.bind(SC.Widget.Events.FINISH, () => (playBtn.textContent = "\u25b6"));
+
+    widget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
+      state.position = e.currentPosition;
+      sessionStorage.setItem(SC_KEY, JSON.stringify(state));
+      cur.textContent = fmtTime(e.currentPosition);
+      fill.style.width = (e.relativePosition * 100).toFixed(2) + "%";
+    });
+
+    playBtn.addEventListener("click", () => widget.toggle());
+
+    track.addEventListener("click", (e) => {
+      if (!duration) return;
+      const r = track.getBoundingClientRect();
+      widget.seekTo(duration * ((e.clientX - r.left) / r.width));
+    });
+  });
+}
+
+function restoreSoundBar() {
+  const raw = sessionStorage.getItem(SC_KEY);
+  if (!raw) return;
+  try {
+    mountSoundBar(JSON.parse(raw), true);
+  } catch (err) {}
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderHeader();
   renderFooter();
   initLang();
+  restoreSoundBar();
 });

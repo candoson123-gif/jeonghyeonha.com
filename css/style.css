@@ -12,7 +12,7 @@
   --muted: #8a8a8a;
   --placeholder: #e9e9e9;
   --nav-height: 96px;
-  --footer-height: 48px;
+  --footer-height: 0px;
   --max-width: 1240px;
   --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
@@ -244,6 +244,8 @@ body.lang-ko .en { display: none; }
   padding: 0 72px 72px;
   cursor: default;
 }
+.work-detail-modal .detail-back-btn { display: none; }
+
 .work-detail-modal .detail-header {
   position: sticky;
   top: 0;
@@ -291,6 +293,22 @@ body.lang-ko .en { display: none; }
     align-items: flex-start;
     gap: 2px;
   }
+  .work-detail-modal .detail-header { position: sticky; padding-right: 40px; }
+  .work-detail-modal .detail-back-btn {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    padding: 4px 6px;
+    font-family: inherit;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--fg);
+    cursor: pointer;
+  }
   .work-detail-modal .detail-title { white-space: normal; }
   .work-detail-modal .detail-meta { text-align: left; }
   .work-detail-modal .detail-media { margin-bottom: 24px; }
@@ -299,6 +317,7 @@ body.lang-ko .en { display: none; }
 .works-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  align-items: start;
   gap: 32px 24px;
   padding-bottom: 60px;
 }
@@ -336,6 +355,19 @@ body.lang-ko .en { display: none; }
   background: #000;
   cursor: default;
 }
+.audio-modal {
+  width: 100%;
+  max-width: 700px;
+  height: 480px;
+  background: #000;
+  cursor: default;
+}
+.audio-modal iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
 .video-modal iframe {
   width: 100%;
   height: 100%;
@@ -348,11 +380,10 @@ body.lang-ko .en { display: none; }
 .work-card .thumb {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 2;
   background: var(--placeholder);
   overflow: hidden;
 }
-.work-card .thumb img { width: 100%; height: 100%; object-fit: cover; }
+.work-card .thumb img { width: 100%; height: auto; display: block; }
 .work-card .thumb .play-icon {
   position: absolute;
   bottom: 10px; right: 10px;
@@ -372,7 +403,12 @@ body.lang-ko .en { display: none; }
 .work-card .caption {
   margin-top: 10px;
   font-size: 12px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
 }
+.work-card .caption .note { color: var(--muted); }
 .work-card .caption .muted { color: var(--muted); }
 
 /* ---------- work detail ---------- */
@@ -513,3 +549,60 @@ form.contact-form { text-align: left; padding-top: 36px; }
   font-family: inherit;
 }
 .form-note { font-size: 11px; color: var(--muted); margin-top: 14px; }
+
+/* ---------- 하단 사운드 재생바 ---------- */
+#sound-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 150;
+  height: 52px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+#sound-bar iframe {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+#sb-play, #sb-close {
+  flex: none;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--fg);
+}
+#sb-play { font-size: 12px; width: 16px; }
+#sb-close { font-size: 16px; color: var(--muted); }
+#sb-close:hover { color: var(--fg); }
+#sb-cur, #sb-dur { flex: none; font-variant-numeric: tabular-nums; }
+#sb-track {
+  flex: 1;
+  height: 2px;
+  background: var(--placeholder);
+  cursor: pointer;
+}
+#sb-fill { width: 0; height: 100%; background: var(--fg); }
+#sb-title {
+  flex: none;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg);
+}
+body.has-sound-bar { padding-bottom: calc(var(--footer-height) + 52px); }
+body.has-sound-bar #site-footer { bottom: 52px; }
+@media (max-width: 700px) {
+  #sb-title { display: none; }
+}

@@ -60,7 +60,6 @@ const WORKS = [
       "images/works/moth-03.jpg",
       "images/works/moth-04.jpg",
       "images/works/moth-05.jpg",
-      "images/works/moth-06.jpg",
     ],
     video: null,
     statementKo: "",
@@ -100,7 +99,6 @@ const WORKS = [
     duration: "11'57\"",
     thumb: "",
     images: [
-      "images/works/relasea-01.jpg",
       "images/works/relasea-02.jpg",
       "images/works/relasea-03.jpg",
       "images/works/relasea-04.jpg",
