@@ -57,16 +57,43 @@ function startAutoScroll(container) {
   };
 }
 
+const CATEGORIES = [
+  { key: "film-video", label: "film&video" },
+  { key: "space", label: "space" },
+  { key: "text", label: "text" },
+  { key: "workshop", label: "workshop" },
+];
+
+let currentCategory = CATEGORIES[0].key;
+
 function renderTitleRow() {
   const row = document.getElementById("works-title-row");
-  row.innerHTML = WORKS.map(
-    (w) => `
-    <button type="button" class="${w.id === currentWorkId ? "active" : ""}" data-id="${w.id}">
-      <span class="ko">${w.titleKo} ${w.yearLabel || w.year}</span><span class="en">${w.titleEn} ${w.yearLabel || w.year}</span>
-    </button>`
+
+  const tabs = CATEGORIES.map(
+    (c) =>
+      `<button type="button" class="cat-tab ${c.key === currentCategory ? "active" : ""}" data-cat="${c.key}">${c.label}</button>`
   ).join("");
 
-  row.querySelectorAll("button").forEach((btn) => {
+  const items = WORKS.filter((w) => (w.category || "film-video") === currentCategory);
+  const titles = items
+    .map(
+      (w) => `
+    <button type="button" class="${w.id === currentWorkId ? "active" : ""}" data-id="${w.id}">
+      <span class="ko">${w.titleKo}${w.yearLabel || w.year ? " " + (w.yearLabel || w.year) : ""}</span><span class="en">${w.titleEn}${w.yearLabel || w.year ? " " + (w.yearLabel || w.year) : ""}</span>
+    </button>`
+    )
+    .join("");
+
+  row.innerHTML = `<div class="works-cat-tabs">${tabs}</div><div class="works-title-list">${titles}</div>`;
+
+  row.querySelectorAll("button.cat-tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentCategory = btn.dataset.cat;
+      renderTitleRow();
+    });
+  });
+
+  row.querySelectorAll(".works-title-list button").forEach((btn) => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.id;
       if (id === currentWorkId) {
@@ -92,15 +119,20 @@ function workDetailHtml(work) {
          </div>
        </div>`
     : "";
+  const pdfBlock = work.pdf
+    ? `<div class="detail-pdf" data-pdf="${work.pdf}"></div>`
+    : "";
   const mediaHtml =
     (work.images[0] ? imageBlock(work.images[0]) : "") +
     videoBlock +
+    pdfBlock +
     work.images.slice(1).map(imageBlock).join("");
 
   return `
-    <div class="detail-header">
-      <h1 class="detail-title"><span class="detail-title-ko">${work.titleKo}</span>${titleEnPart}</h1>
-      <div class="detail-meta">${metaParts.join("   \u00b7   ")}</div>
+    <div class="detail-header${metaParts.length ? "" : " centered"}">
+      <h1 class="detail-title"><span class="detail-title-ko">${work.detailTitle || work.titleKo}</span>${work.detailTitle ? "" : titleEnPart}</h1>
+      ${metaParts.length ? `<div class="detail-meta">${metaParts.join("   ·   ")}</div>` : ""}
+      <button type="button" class="detail-back-btn" aria-label="back">«</button>
     </div>
     ${mediaHtml}
   `;
@@ -114,10 +146,11 @@ function openWorkDetail(work) {
     </div>
   `;
   overlay.querySelectorAll(".video-embed[data-video-id]").forEach(mountClickToPlay);
+  overlay.querySelectorAll(".detail-pdf[data-pdf]").forEach(mountPdfReader);
 
   const backdrop = document.getElementById("work-detail-backdrop");
   backdrop.addEventListener("click", (e) => {
-    if (e.target.tagName !== "IMG" && !e.target.closest(".video-embed")) {
+    if (e.target.tagName !== "IMG" && !e.target.closest(".video-embed") && !e.target.closest(".detail-pdf")) {
       closeWorkDetail();
     }
   });

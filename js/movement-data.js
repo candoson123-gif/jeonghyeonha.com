@@ -60,6 +60,24 @@ const LOCATIONS = [
       { src: "images/movement/euljiro-sewoon-06.jpg", captionKo: "", captionEn: "" },
     ],
   },
+  {
+    id: "geonip-dong",
+    year: 2026,
+    nameKo: "건입동",
+    nameEn: "Geonip-dong",
+    photos: [
+      { src: "images/movement/geonipdong-01.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-02.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-03.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-04.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-05.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-06.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-07.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-08.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-09.jpg", captionKo: "", captionEn: "" },
+      { src: "images/movement/geonipdong-10.jpg", captionKo: "", captionEn: "" },
+    ],
+  },
   // ↓ 새 장소를 추가할 때는 위 객체를 복사해서 이 자리에 붙여넣고 내용만 바꾸면 됩니다.
 ];
 

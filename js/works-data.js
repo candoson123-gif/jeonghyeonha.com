@@ -112,6 +112,7 @@ const WORKS = [
 
   {
     id: "gyeonggye-sangsil-seoul",
+    category: "space",
     titleKo: "경계를 상실한 서울을 위한 도해",
     titleEn: "Diagram for a Seoul That Has Lost Its Boundaries",
     year: 2022,
@@ -163,6 +164,25 @@ const WORKS = [
       "images/works/imagesourcing-03.jpg",
     ],
     video: null,
+    statementKo: "",
+    statementEn: "",
+  },
+
+  {
+    id: "slology",
+    category: "text",
+    titleKo: "《느림술Slology》",
+    titleEn: "《느림술Slology》",
+    year: "",
+    yearLabel: "",
+    detailTitle: "《느림술Slology》, 2025",
+    medium: "",
+    size: "",
+    duration: "",
+    thumb: "",
+    images: [],
+    video: null,
+    pdf: "files/slology.pdf",
     statementKo: "",
     statementEn: "",
   },
