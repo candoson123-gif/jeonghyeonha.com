@@ -5,6 +5,7 @@
    ========================================================================== */
 
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap");
 
 :root {
   --bg: #ffffff;
@@ -244,6 +245,7 @@ body[data-page="works"] .page-wrap { padding-top: 12px; }
   text-align: left;
 }
 .works-title-row button:hover { color: var(--fg); }
+.works-title-row .work-year { font-style: italic; font-size: 12.5px; }
 .works-title-row button.active {
   color: var(--fg);
   font-weight: 500;
@@ -310,11 +312,29 @@ body[data-page="works"] .page-wrap { padding-top: 12px; }
 .work-detail-modal .detail-media {
   margin-bottom: 40px;
 }
-.work-detail-modal .detail-media img {
+.work-detail-modal .detail-media {
+  aspect-ratio: 16 / 9;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.work-detail-modal .detail-media.portrait {
+  aspect-ratio: auto;
+  display: flex;
+  justify-content: center;
+}
+.work-detail-modal .detail-media.portrait img {
   width: auto;
+  height: auto;
   max-width: 100%;
   max-height: 70vh;
-  margin: 0 auto;
+  object-fit: initial;
+}
+.work-detail-modal .detail-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: none;
 }
 @media (max-width: 700px) {
   .work-detail-backdrop { padding: 0; }
@@ -674,3 +694,13 @@ body.has-sound-bar #site-footer { bottom: 52px; }
   cursor: pointer;
 }
 .pdf-nav button:hover { opacity: 0.5; }
+
+/* ---------- 상세 화면 크레딧 ---------- */
+.work-detail-modal .detail-credits {
+  width: 90%;
+  margin: 8px auto 0;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--fg);
+  white-space: pre-line;
+}

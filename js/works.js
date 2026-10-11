@@ -79,7 +79,7 @@ function renderTitleRow() {
     .map(
       (w) => `
     <button type="button" class="${w.id === currentWorkId ? "active" : ""}" data-id="${w.id}">
-      <span class="ko">${w.titleKo}${w.yearLabel || w.year ? " " + (w.yearLabel || w.year) : ""}</span><span class="en">${w.titleEn}${w.yearLabel || w.year ? " " + (w.yearLabel || w.year) : ""}</span>
+      <span class="ko">${w.titleKo}${w.yearLabel || w.year ? ` <em class="work-year">${w.yearLabel || w.year}</em>` : ""}</span><span class="en">${w.titleEn}${w.yearLabel || w.year ? ` <em class="work-year">${w.yearLabel || w.year}</em>` : ""}</span>
     </button>`
     )
     .join("");
@@ -111,7 +111,7 @@ function workDetailHtml(work) {
     work.titleEn && work.titleEn !== work.titleKo
       ? ` <span class="detail-title-en">${work.titleEn}</span>`
       : "";
-  const imageBlock = (src) => `<div class="detail-media"><img src="${src}" alt="${work.titleEn}"></div>`;
+  const imageBlock = (src) => `<div class="detail-media${work.portrait || (work.portraitImages || []).includes(src) ? " portrait" : ""}"><img src="${src}" alt="${work.titleEn}"></div>`;
   const videoBlock = work.video
     ? `<div class="detail-media">
          <div class="video-embed" data-video-type="${work.video.type}" data-video-id="${work.video.id}" data-video-hash="${work.video.hash || ""}">
@@ -122,6 +122,10 @@ function workDetailHtml(work) {
   const pdfBlock = work.pdf
     ? `<div class="detail-pdf" data-pdf="${work.pdf}"></div>`
     : "";
+  const creditsHtml =
+    work.creditsKo || work.creditsEn
+      ? `<div class="detail-credits"><span class="ko">${work.creditsKo || ""}</span><span class="en">${work.creditsEn || ""}</span></div>`
+      : "";
   const mediaHtml =
     (work.images[0] ? imageBlock(work.images[0]) : "") +
     videoBlock +
@@ -130,11 +134,12 @@ function workDetailHtml(work) {
 
   return `
     <div class="detail-header${metaParts.length ? "" : " centered"}">
-      <h1 class="detail-title"><span class="detail-title-ko">${work.detailTitle || work.titleKo}</span>${work.detailTitle ? "" : titleEnPart}</h1>
-      ${metaParts.length ? `<div class="detail-meta">${metaParts.join("   ·   ")}</div>` : ""}
+      <h1 class="detail-title">${work.detailTitleKo || work.detailTitleEn ? `<span class="ko">${work.detailTitleKo || work.detailTitleEn}</span><span class="en">${work.detailTitleEn || work.detailTitleKo}</span>` : `<span class="detail-title-ko">${work.titleKo}</span>${titleEnPart}`}</h1>
+      ${metaParts.length ? `<div class="detail-meta">${metaParts.join(", ")}</div>` : ""}
       <button type="button" class="detail-back-btn" aria-label="back">«</button>
     </div>
     ${mediaHtml}
+    ${creditsHtml}
   `;
 }
 

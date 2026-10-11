@@ -18,7 +18,7 @@ const SITE = {
 //   KO/EN 전환은 각 페이지 "본문 콘텐츠"에만 적용됩니다.
 const NAV_ITEMS = [
   { href: "index.html", en: "Works", key: "works" },
-  { href: "movement.html", en: "Movement", key: "movement" },
+  { href: "research.html", en: "Research", key: "research" },
   { href: "sound.html", en: "Sound", key: "sound" },
   { href: "cv.html", en: "CV", key: "cv" },
   { href: "contact.html", en: "Contact", key: "contact" },
