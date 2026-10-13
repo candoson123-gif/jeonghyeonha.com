@@ -193,6 +193,17 @@ function selectWork(id) {
   history.replaceState(null, "", `index.html?id=${work.id}`);
 }
 
+
+// PDF가 있는 작업은 화면이 뜨고 잠시 뒤 미리 받아둬서, 클릭했을 때 기다림 없이 바로 보이게 합니다.
+function prefetchPdfs() {
+  const pdfs = WORKS.filter((w) => w.pdf).map((w) => w.pdf);
+  if (!pdfs.length) return;
+  setTimeout(() => {
+    if (typeof loadPdfJs === "function") loadPdfJs(() => {});
+    pdfs.forEach((u) => fetch(u).catch(() => {}));
+  }, 1200);
+}
+
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && currentWorkId) closeWorkDetail();
 });
@@ -207,4 +218,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   renderTitleRow();
+  prefetchPdfs();
 });

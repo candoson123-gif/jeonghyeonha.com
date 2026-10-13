@@ -22,6 +22,22 @@ function mountClickToPlay(container) {
   playBtn.className = "play-button";
   container.appendChild(playBtn);
 
+  // 재생 전에는 영상 썸네일을 배경으로 보여줍니다.
+  if (type === "vimeo") {
+    const pageUrl = "https://vimeo.com/" + id + (hash ? "?h=" + hash : "");
+    fetch("https://vimeo.com/api/oembed.json?width=1280&url=" + encodeURIComponent(pageUrl))
+      .then((r) => r.json())
+      .then((d) => {
+        if (d && d.thumbnail_url) {
+          container.style.backgroundImage = 'url("' + d.thumbnail_url + '")';
+        }
+      })
+      .catch(() => {});
+  } else if (type === "youtube") {
+    container.style.backgroundImage =
+      'url("https://img.youtube.com/vi/' + id + '/maxresdefault.jpg")';
+  }
+
   container.addEventListener(
     "click",
     () => {

@@ -473,6 +473,8 @@ body[data-page="works"] .page-wrap { padding-top: 12px; }
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #dcdcdc;
+  background-size: cover;
+  background-position: center;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   overflow: hidden;
