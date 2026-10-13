@@ -23,6 +23,9 @@ function mountClickToPlay(container) {
   container.appendChild(playBtn);
 
   // 재생 전에는 영상 썸네일을 배경으로 보여줍니다.
+  const poster = container.dataset.poster;
+  if (poster) container.style.backgroundImage = 'url("' + poster + '")';
+
   if (type === "vimeo") {
     const pageUrl = "https://vimeo.com/" + id + (hash ? "?h=" + hash : "");
     fetch("https://vimeo.com/api/oembed.json?width=1280&url=" + encodeURIComponent(pageUrl))
@@ -40,10 +43,11 @@ function mountClickToPlay(container) {
 
   container.addEventListener(
     "click",
-    () => {
+    (ev) => {
+      ev.stopPropagation();
       let src = "";
       if (type === "vimeo") {
-        src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0${hash ? "&h=" + hash : ""}`;
+        src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&quality=1080p${hash ? "&h=" + hash : ""}`;
       } else if (type === "youtube") {
         src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
       }

@@ -114,8 +114,7 @@ function workDetailHtml(work) {
   const imageBlock = (src) => `<div class="detail-media${work.portrait || (work.portraitImages || []).includes(src) ? " portrait" : ""}"><img src="${src}" alt="${work.titleEn}"></div>`;
   const videoBlock = work.video
     ? `<div class="detail-media">
-         <div class="video-embed" data-video-type="${work.video.type}" data-video-id="${work.video.id}" data-video-hash="${work.video.hash || ""}">
-           <span class="video-note">${work.video.type === "vimeo" ? "Vimeo" : "YouTube"}</span>
+         <div class="video-embed" data-video-type="${work.video.type}" data-video-id="${work.video.id}" data-video-hash="${work.video.hash || ""}" data-poster="${work.images[0] || ""}">
          </div>
        </div>`
     : "";
@@ -195,6 +194,17 @@ function selectWork(id) {
 
 
 // PDF가 있는 작업은 화면이 뜨고 잠시 뒤 미리 받아둬서, 클릭했을 때 기다림 없이 바로 보이게 합니다.
+function prefetchImages() {
+  setTimeout(() => {
+    WORKS.forEach((w) => {
+      (w.images || []).forEach((src) => {
+        const img = new Image();
+        img.src = src;
+      });
+    });
+  }, 800);
+}
+
 function prefetchPdfs() {
   const pdfs = WORKS.filter((w) => w.pdf).map((w) => w.pdf);
   if (!pdfs.length) return;
@@ -218,5 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   renderTitleRow();
+  prefetchImages();
   prefetchPdfs();
 });
