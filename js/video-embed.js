@@ -37,6 +37,25 @@ function mountClickToPlay(container) {
       iframe.allowFullscreen = true;
       container.innerHTML = "";
       container.appendChild(iframe);
+
+      // 영상이 재생되는 동안에는 상세 화면의 자동 스크롤을 멈춥니다.
+      if (type === "vimeo") {
+        window.autoScrollBlocked = true;
+        const bind = () => {
+          const player = new window.Vimeo.Player(iframe);
+          player.on("play", () => (window.autoScrollBlocked = true));
+          player.on("pause", () => (window.autoScrollBlocked = false));
+          player.on("ended", () => (window.autoScrollBlocked = false));
+        };
+        if (window.Vimeo) {
+          bind();
+        } else {
+          const api = document.createElement("script");
+          api.src = "https://player.vimeo.com/api/player.js";
+          api.onload = bind;
+          document.head.appendChild(api);
+        }
+      }
     },
     { once: true }
   );

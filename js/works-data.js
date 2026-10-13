@@ -82,7 +82,7 @@ const WORKS = [
       "images/works/gangsan-06.jpg",
     ], // 보내주신 스틸컷 원본 (스캔/포토그래메트리 컷)
     // ★ 이미지를 더 추가하려면 images 배열에 경로를 더 넣어주세요. 새 작품 이미지는 images/works/ 폴더에 넣어주세요.
-    video: null,
+    video: { type: "vimeo", id: "1235261765", hash: "" },
     statementKo:
       "재개발 지역 근교의 천, 표면이 찢어지고 바래진 낡은 강산의 모습이 보인다. 하수 시설의 벽에 붙은 강산의 사진은 민족적 의미에서 탈피하여 도외시되어 있는 상태로 존재한다. 강산은 과거 마을을 구분하는 지리적 경계이자 그 자체로 측량할 수 없는 '자연'이었다. 그러나 식민지화의 과정에서 제작된 지도 속 강산은 근대의 기입물이 된다. 그럼에도 여전히 강물은 예상하지 못한 방향에서 흘러들어온다. 정해진 배관의 경로를 이탈해 집 천장으로 들어온 물은 그러한 강산의 먼 기원을 상상하는 계기가 된다. 지도를 제작한 측량사의 손짓에는 오차가 존재하고 그 미세한 틈으로 침입하는 시간은 어떻게 기념할 수 있을까. 고장난 피아노와 낡은 집 그리고 흩어지는 동네의 사람들은 이야기가 될 수 있을까.",
     statementEn:
@@ -106,7 +106,7 @@ const WORKS = [
       "images/works/moth-04.jpg",
       "images/works/moth-05.jpg",
     ],
-    video: null,
+    video: { type: "vimeo", id: "1235251809", hash: "" },
     statementKo: "",
     statementEn: "",
   },
@@ -173,7 +173,7 @@ const WORKS = [
       "images/works/airgun-03.jpg",
       "images/works/airgun-04.jpg",
     ],
-    video: null,
+    video: { type: "vimeo", id: "1230230275", hash: "cbb54f9951" },
     creditsKo:
       "본 작업의 음향 자료는 극지연구소 나형술 박사님께서 제공해 주셨으며, 쇄빙연구선 아라온호의 극지 관측을 통해 수집되었습니다. 자료를 제공해 주신 나형술 박사님과 극지연구소에 깊이 감사드립니다.",
     creditsEn:
@@ -299,7 +299,7 @@ const WORKS = [
     thumb: "",
     images: [],
     video: null,
-    pdf: "",
+    pdf: "files/재난과사이버공간.pdf",
     statementKo: "",
     statementEn: "",
   },

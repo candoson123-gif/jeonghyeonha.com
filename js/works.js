@@ -38,7 +38,7 @@ function startAutoScroll(container) {
     const dt = Math.min((now - lastTime) / 1000, 0.1);
     lastTime = now;
 
-    if (!paused) {
+    if (!paused && !window.autoScrollBlocked) {
       const max = container.scrollHeight - container.clientHeight;
       if (max > 0) {
         position = Math.min(position + SPEED * dt, max);
@@ -127,10 +127,9 @@ function workDetailHtml(work) {
       ? `<div class="detail-credits"><span class="ko">${work.creditsKo || ""}</span><span class="en">${work.creditsEn || ""}</span></div>`
       : "";
   const mediaHtml =
-    (work.images[0] ? imageBlock(work.images[0]) : "") +
     videoBlock +
     pdfBlock +
-    work.images.slice(1).map(imageBlock).join("");
+    work.images.map(imageBlock).join("");
 
   return `
     <div class="detail-header${metaParts.length ? "" : " centered"}">
@@ -172,7 +171,13 @@ function closeWorkDetail() {
     stopAutoScroll = null;
   }
   const overlay = document.getElementById("work-detail-overlay");
+  // 닫을 때 재생 중인 영상을 확실히 정지시킵니다.
+  overlay.querySelectorAll("iframe").forEach((f) => {
+    f.src = "about:blank";
+    f.remove();
+  });
   overlay.innerHTML = "";
+  window.autoScrollBlocked = false;
   currentWorkId = null;
   document.querySelectorAll("#works-title-row button.active").forEach((b) => b.classList.remove("active"));
   document.title = `Works — ${SITE.artistNameEn}`;
